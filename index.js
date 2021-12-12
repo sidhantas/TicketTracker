@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const axios = require("axios");
 require("dotenv").config();
 const nodeMailer = require("nodemailer");
@@ -25,7 +27,7 @@ axios({
     let lookup = priceMap.get(section);
     
     if (lookup && price <= lookup.price_limit && num_tickets >= lookup.num_tickets) {
-      message += `Found Section: ${value.s}\n${value.rf}\nPrice: ${value.sgp}\n# of Tickets: ${value.q}\n`;
+      message += `Found Section: ${value.s}\n${value.rf}\nPrice: ${value.sgp}\n# of Tickets: ${value.q}\n\n`;
     }
     total_tickets += value.q;
   }
