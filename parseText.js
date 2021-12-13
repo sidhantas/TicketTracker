@@ -11,9 +11,9 @@ function parseText(textFile) {
     let upper_seat = parseInt(arr[1]);
     let price_limit = parseInt(arr[2]);
     let num_tickets = parseInt(arr[3]);
-    
+
     for (let i = lower_seat; i < upper_seat; i++) {
-      priceMap.set(i, {price_limit: price_limit, num_tickets: num_tickets});
+      priceMap.set(i, { price_limit: price_limit, num_tickets: num_tickets });
     }
   });
   return priceMap;
