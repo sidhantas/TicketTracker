@@ -44,8 +44,8 @@ const get_seat_geek = async () => {
       let row = value.rf;
       add_tickets("Seat Geek", section, price, num_tickets, row, lookup);
     }
-  } catch {
-    console.log("Error");
+  } catch(err) {
+    console.log(err);
   }
 };
 
@@ -60,8 +60,8 @@ const get_vivid_seats = async () => {
       let lookup = priceMap.get(section);
       add_tickets("Vivid Seats", section, price, num_tickets, row, lookup);
     }
-  } catch {
-    console.log("Error");
+  } catch (err){
+    console.log(err);
   }
 };
 
