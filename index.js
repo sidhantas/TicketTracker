@@ -5,6 +5,7 @@ require("dotenv").config();
 const nodeMailer = require("nodemailer");
 const parseText = require("./parseText");
 const vivid_seats_axios_config = require("./vivid_seats_headers");
+const seat_geek_axios_config = require("./seat_geek_headers");
 
 const transporter = nodeMailer.createTransport({
   service: "gmail",
@@ -31,21 +32,18 @@ const add_tickets = (source, section, price, num_tickets, row, lookup) => {
 
 const get_seat_geek = async () => {
   try {
-    const response = await axios({
-      method: "get",
-      url: process.env.SEAT_GEEK_REQUEST_URL,
-    });
+    const response = await axios(seat_geek_axios_config);
 
     for (let value of Object.values(response.data.listings)) {
       let section = parseInt(value.s);
-      let price = value.sgp;
+      let price = value.dp;
       let num_tickets = value.q;
       let lookup = priceMap.get(section);
       let row = value.rf;
       add_tickets("Seat Geek", section, price, num_tickets, row, lookup);
     }
-  } catch(err) {
-    console.log(err);
+  } catch {
+    console.log("Error");
   }
 };
 
@@ -54,14 +52,14 @@ const get_vivid_seats = async () => {
     const response = await axios(vivid_seats_axios_config);
     for (let value of Object.values(response.data.tickets)) {
       let section = parseInt(value.d);
-      let price = parseInt(value.p);
+      let price = parseInt(value.p) + 100;
       let num_tickets = parseInt(value.q);
       let row = parseInt(value.r);
       let lookup = priceMap.get(section);
       add_tickets("Vivid Seats", section, price, num_tickets, row, lookup);
     }
-  } catch (err){
-    console.log(err);
+  } catch {
+    console.log("Error");
   }
 };
 
