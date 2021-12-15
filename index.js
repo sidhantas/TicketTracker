@@ -6,7 +6,7 @@ const nodeMailer = require("nodemailer");
 const parseText = require("./parseText");
 const vivid_seats_axios_config = require("./vivid_seats_headers");
 const seat_geek_axios_config = require("./seat_geek_headers");
-const seats_wanted = "seats_wanted";
+const config = "seats_wanted.config";
 
 const transporter = nodeMailer.createTransport({
   service: "gmail",
@@ -18,7 +18,7 @@ const transporter = nodeMailer.createTransport({
 
 let message = "";
 let total_tickets = 0;
-const priceMap = parseText(seats_wanted);
+const priceMap = parseText(config);
 
 const add_tickets = (source, section, price, num_tickets, row, lookup) => {
   if (
