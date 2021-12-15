@@ -36,7 +36,7 @@ const get_seat_geek = async () => {
     const response = await axios(seat_geek_axios_config);
 
     for (let value of Object.values(response.data.listings)) {
-      let section = parseInt(value.s);
+      let section = parseInt(value.s) ? parseInt(value.s) : value.sf;
       let price = value.dp;
       let num_tickets = value.q;
       let lookup = priceMap.get(section);
@@ -52,7 +52,7 @@ const get_vivid_seats = async () => {
   try {
     const response = await axios(vivid_seats_axios_config);
     for (let value of Object.values(response.data.tickets)) {
-      let section = parseInt(value.d);
+      let section = value.s.substr(0, 5) === "Floor" ? value.s : parseInt(value.d);
       let price = parseInt(value.p) + 100;
       let num_tickets = parseInt(value.q);
       let row = parseInt(value.r);
