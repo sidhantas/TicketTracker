@@ -68,7 +68,13 @@ const get_vivid_seats = async () => {
 
 
 const read_prev_email = () => {
-  return cache_prev = fs.readFileSync(cache_email_file, "utf-8");
+  try {
+    cache_prev = fs.readFileSync(cache_email_file, "utf-8");
+  } catch {
+    fs.closeSync(fs.openSync(cache_email_file, "w"));
+    cache_prev = fs.readFileSync(cache_email_file, "utf-8");
+  }
+  return cache_prev;
 }
 
 const write_prev_email = (email) => {
