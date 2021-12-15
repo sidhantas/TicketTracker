@@ -23,7 +23,6 @@ function parseText(textFile) {
       priceMap.set(floor, { price_limit: price_limit, num_tickets: num_tickets });
     }
   });
-  console.log(priceMap);
   return priceMap;
 }
 

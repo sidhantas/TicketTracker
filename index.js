@@ -3,10 +3,12 @@
 const axios = require("axios");
 require("dotenv").config();
 const nodeMailer = require("nodemailer");
+const fs = require("fs");
 const parseText = require("./parseText");
 const vivid_seats_axios_config = require("./vivid_seats_headers");
 const seat_geek_axios_config = require("./seat_geek_headers");
 const config = "seats_wanted.config";
+const cache_email_file = "./cache/prev_email.tmp";
 
 const transporter = nodeMailer.createTransport({
   service: "gmail",
@@ -64,11 +66,24 @@ const get_vivid_seats = async () => {
   }
 };
 
+
+const read_prev_email = () => {
+  return cache_prev = fs.readFileSync(cache_email_file, "utf-8");
+}
+
+const write_prev_email = (email) => {
+  try {
+    fs.writeFileSync(cache_email_file, email);
+  } catch {
+    console.log("Could Not Write to Cache");
+  }
+}
+
 const get_all = async () => {
   try {
     Promise.all([get_seat_geek(), get_vivid_seats()]).then(() => {
       console.log(total_tickets);
-      if (message) {
+      if (message && message != read_prev_email()) {
         const mailOptions = {
           from: process.env.EMAIL_USER,
           to: process.env.RECEIVER_EMAIL,
@@ -79,6 +94,7 @@ const get_all = async () => {
           if (err) {
             console.log(err);
           } else {
+            write_prev_email(message);
             console.log(`Email sent: ${info.response}`);
           }
         });
