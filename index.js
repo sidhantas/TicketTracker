@@ -69,7 +69,7 @@ const get_vivid_seats = async () => {
 
 const read_prev_email = () => {
   try {
-    cache_prev = fs.readFileSync(cache_email_file, "utf-8");
+    cache_prev = parseInt(fs.readFileSync(cache_email_file, "utf-8"));
   } catch {
     fs.closeSync(fs.openSync(cache_email_file, "w"));
     cache_prev = fs.readFileSync(cache_email_file, "utf-8");
@@ -79,7 +79,7 @@ const read_prev_email = () => {
 
 const write_prev_email = (email) => {
   try {
-    fs.writeFileSync(cache_email_file, email);
+    fs.writeFileSync(cache_email_file, email.toString());
   } catch {
     console.log("Could Not Write to Cache");
   }
@@ -88,8 +88,12 @@ const write_prev_email = (email) => {
 const get_all = async () => {
   try {
     Promise.all([get_seat_geek(), get_vivid_seats()]).then(() => {
-      console.log(total_tickets);
-      if (message && message != read_prev_email()) {
+      let ascii_message = 0;
+      for (let i = 0; i < message.length; i++) {
+        ascii_message += message.charCodeAt(i);
+      }
+      console.log(ascii_message);
+      if (message && ascii_message != read_prev_email()) {
         const mailOptions = {
           from: process.env.EMAIL_USER,
           to: process.env.RECEIVER_EMAIL,
@@ -100,7 +104,7 @@ const get_all = async () => {
           if (err) {
             console.log(err);
           } else {
-            write_prev_email(message);
+            write_prev_email(ascii_message);
             console.log(`Email sent: ${info.response}`);
           }
         });
