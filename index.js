@@ -89,10 +89,10 @@ const get_all = async () => {
   try {
     Promise.all([get_seat_geek(), get_vivid_seats()]).then(() => {
       let ascii_message = 0;
+      console.log(total_tickets);
       for (let i = 0; i < message.length; i++) {
         ascii_message += message.charCodeAt(i);
       }
-      console.log(ascii_message);
       if (message && ascii_message != read_prev_email()) {
         const mailOptions = {
           from: process.env.EMAIL_USER,
